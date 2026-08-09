@@ -9,8 +9,11 @@ sqlalchemy = "*"
 psycopg = {extras = ["binary"], version = "*"}
 python-dotenv = "*"
 alembic = "*"
+marshmallow = "*"
 
 [dev-packages]
+black = "*"
+ruff = "*"
 
 [requires]
 python_version = "3.14"
