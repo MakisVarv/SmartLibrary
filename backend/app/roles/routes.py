@@ -3,6 +3,7 @@ from flask import Blueprint, jsonify, request
 
 from app.extensions import SessionFactory
 from app.roles.schema import (
+    add_permission_schema,
     create_role_schema,
     role_schema,
     roles_schema,
@@ -81,3 +82,28 @@ def delete_role(role_id):
             jsonify({"message": "Role deleted successfully."}),
             200,
         )
+
+
+@role_bp.post("/<uuid:role_id>/permissions")
+def assign_permission(role_id):
+    data = add_permission_schema.load(request.get_json())
+
+    with SessionFactory() as session:
+        service = RoleService(session)
+
+        role = service.assign_permission(
+            role_id,
+            data["permission_id"],
+        )
+
+        return role_schema.dump(role), 200
+
+
+@role_bp.delete("/<uuid:role_id>/permissions/<uuid:permission_id>")
+def remove_permission(role_id, permission_id):
+    with SessionFactory() as session:
+        service = RoleService(session)
+
+        role = service.remove_permission(role_id, permission_id)
+
+        return role_schema.dump(role), 200

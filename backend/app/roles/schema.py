@@ -1,5 +1,7 @@
 from marshmallow import Schema, ValidationError, fields, validate, validates_schema
 
+from app.permissions.schema import PermissionSchema
+
 
 class RoleSchema(Schema):
     """Role response schema."""
@@ -9,6 +11,11 @@ class RoleSchema(Schema):
     name = fields.String()
 
     description = fields.String(allow_none=True)
+
+    permissions = fields.Nested(
+        PermissionSchema,
+        many=True,
+    )
 
 
 class CreateRoleSchema(Schema):
@@ -42,6 +49,13 @@ class UpdateRoleSchema(Schema):
         if "name" not in data and "description" not in data:
             raise ValidationError("At least one field must be provided.")
 
+
+class AddPermissionSchema(Schema):
+
+    permission_id = fields.UUID(required=True)
+
+
+add_permission_schema = AddPermissionSchema()
 
 role_schema = RoleSchema()
 

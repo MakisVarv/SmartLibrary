@@ -1,9 +1,14 @@
 import uuid
+from typing import TYPE_CHECKING
 
 from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
+from app.associations import role_permissions
 from app.extensions import Base
+
+if TYPE_CHECKING:
+    from app.permissions.model import Permission
 
 
 class Role(Base):
@@ -24,4 +29,10 @@ class Role(Base):
     description: Mapped[str | None] = mapped_column(
         String(255),
         nullable=True,
+    )
+
+    permissions: Mapped[list["Permission"]] = relationship(
+        "Permission",
+        secondary=role_permissions,
+        back_populates="roles",
     )
