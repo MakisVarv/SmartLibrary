@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
-
+from flask_jwt_extended import JWTManager
 from app.config import DATABASE_URL
 
 if not DATABASE_URL:
@@ -12,6 +12,7 @@ SessionFactory = sessionmaker(
     bind=engine,
     expire_on_commit=False,
 )
+jwt = JWTManager()
 
 
 class Base(DeclarativeBase):

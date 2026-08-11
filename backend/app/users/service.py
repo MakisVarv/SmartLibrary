@@ -5,9 +5,8 @@ from werkzeug.security import generate_password_hash
 
 from app.common.exceptions.bad_request import BadRequestException
 from app.common.exceptions.not_found import NotFoundException
-from app.roles.repository import RoleRepository
-from app.users.model import User
-from app.users.repository import UserRepository
+from app.roles import RoleRepository
+from app.users import User, UserRepository
 
 
 class UserService:
