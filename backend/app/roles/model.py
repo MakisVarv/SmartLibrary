@@ -9,6 +9,7 @@ from app.extensions import Base
 
 if TYPE_CHECKING:
     from app.permissions.model import Permission
+    from app.users.model import User
 
 
 class Role(Base):
@@ -35,4 +36,9 @@ class Role(Base):
         "Permission",
         secondary=role_permissions,
         back_populates="roles",
+    )
+
+    users: Mapped[list["User"]] = relationship(
+        "User",
+        back_populates="role",
     )

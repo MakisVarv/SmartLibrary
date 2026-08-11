@@ -8,6 +8,7 @@ from app.config import DATABASE_URL
 from app.extensions import Base
 from app.permissions import Permission  # noqa: F401
 from app.roles import Role, role_permissions  # noqa: F401
+from app.users import User  # noqa: F401
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
