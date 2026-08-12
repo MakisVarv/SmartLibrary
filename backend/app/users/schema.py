@@ -1,6 +1,6 @@
 from marshmallow import Schema, fields
 
-from app.roles import RoleSchema
+from app.roles.schema import RoleSchema
 
 
 class UserSchema(Schema):

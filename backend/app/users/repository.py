@@ -3,6 +3,7 @@ import uuid
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from app.roles.model import Role
 from app.users.model import User
 
 
@@ -50,3 +51,11 @@ class UserRepository:
     def delete(self, user: User) -> None:
         self.session.delete(user)
         self.session.flush()
+
+    def change_role(self, user: User, role: Role) -> User:
+        user.role = role
+
+        self.session.flush()
+        self.session.refresh(user)
+
+        return user

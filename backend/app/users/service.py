@@ -5,8 +5,9 @@ from werkzeug.security import generate_password_hash
 
 from app.common.exceptions.bad_request import BadRequestException
 from app.common.exceptions.not_found import NotFoundException
-from app.roles import RoleRepository
-from app.users import User, UserRepository
+from app.roles.repository import RoleRepository
+from app.users.model import User
+from app.users.repository import UserRepository
 
 
 class UserService:
@@ -85,6 +86,32 @@ class UserService:
 
         try:
             user = self.repository.update(user, data)
+            self.session.commit()
+            return user
+        except Exception:
+            self.session.rollback()
+            raise
+
+    def delete_user(self, user_id: uuid.UUID) -> None:
+        user = self.get_user(user_id)
+
+        try:
+            self.repository.delete(user)
+            self.session.commit()
+        except Exception:
+            self.session.rollback()
+            raise
+
+    def change_role(self, user_id: uuid.UUID, role_id: uuid.UUID) -> User:
+        user = self.get_user(user_id)
+
+        role = self.role_repository.get_by_id(role_id)
+
+        if role is None:
+            raise NotFoundException("Role")
+
+        try:
+            user = self.repository.change_role(user, role)
             self.session.commit()
             return user
         except Exception:
