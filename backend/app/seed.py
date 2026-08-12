@@ -9,20 +9,56 @@ from app.users.repository import UserRepository
 from app.users.service import UserService
 
 PERMISSIONS = [
+    # Books
     {"name": "book.read", "description": "Read book information"},
     {"name": "book.create", "description": "Create books"},
     {"name": "book.update", "description": "Update books"},
     {"name": "book.delete", "description": "Delete books"},
+    # Authors
+    {"name": "author.read", "description": "Read author information"},
+    {"name": "author.create", "description": "Create authors"},
+    {"name": "author.update", "description": "Update authors"},
+    {"name": "author.delete", "description": "Delete authors"},
+    # Categories
+    {"name": "category.read", "description": "Read category information"},
+    {"name": "category.create", "description": "Create categories"},
+    {"name": "category.update", "description": "Update categories"},
+    {"name": "category.delete", "description": "Delete categories"},
+    # Members
     {"name": "member.read", "description": "Read member information"},
     {"name": "member.create", "description": "Create members"},
     {"name": "member.update", "description": "Update members"},
     {"name": "member.delete", "description": "Delete members"},
+    # Borrowings
     {"name": "borrowing.read", "description": "Read borrowing information"},
     {"name": "borrowing.create", "description": "Create borrowings"},
     {"name": "borrowing.update", "description": "Update borrowings"},
     {"name": "borrowing.delete", "description": "Delete borrowings"},
+    # Users
+    {"name": "user.read", "description": "Read user information"},
+    {"name": "user.create", "description": "Create users"},
+    {"name": "user.update", "description": "Update users"},
+    {"name": "user.delete", "description": "Delete users"},
+    {"name": "user.change_role", "description": "Change a user's role"},
+    # Roles
+    {"name": "role.read", "description": "Read roles"},
+    {"name": "role.create", "description": "Create roles"},
+    {"name": "role.update", "description": "Update roles"},
+    {"name": "role.delete", "description": "Delete roles"},
+    {
+        "name": "role.assign_permission",
+        "description": "Assign or remove permissions from roles",
+    },
+    # Permissions
+    {"name": "permission.read", "description": "Read permissions"},
+    {"name": "permission.create", "description": "Create permissions"},
+    {"name": "permission.update", "description": "Update permissions"},
+    {"name": "permission.delete", "description": "Delete permissions"},
+    # Dashboard
     {"name": "dashboard.read", "description": "View dashboard"},
 ]
+
+
 ROLES = [
     {
         "name": "Admin",
@@ -44,6 +80,14 @@ ROLE_PERMISSIONS = {
         "book.create",
         "book.update",
         "book.delete",
+        "author.read",
+        "author.create",
+        "author.update",
+        "author.delete",
+        "category.read",
+        "category.create",
+        "category.update",
+        "category.delete",
         "member.read",
         "member.create",
         "member.update",
