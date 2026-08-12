@@ -1,6 +1,8 @@
 # type: ignore
 from flask import Blueprint, jsonify, request
+from flask_jwt_extended import jwt_required
 
+from app.auth.authorization import permission_required
 from app.extensions import SessionFactory
 from app.permissions.schema import (
     create_permission_schema,
@@ -18,6 +20,8 @@ permission_bp = Blueprint(
 
 
 @permission_bp.get("/")
+@jwt_required()
+@permission_required("permission.read")
 def get_permissions():
     with SessionFactory() as session:
         service = PermissionService(session)
@@ -27,6 +31,8 @@ def get_permissions():
 
 
 @permission_bp.get("/<uuid:permission_id>")
+@jwt_required()
+@permission_required("permission.read")
 def get_permission(permission_id):
 
     with SessionFactory() as session:
@@ -38,6 +44,8 @@ def get_permission(permission_id):
 
 
 @permission_bp.post("/")
+@jwt_required()
+@permission_required("permission.create")
 def create_permission():
 
     data = create_permission_schema.load(request.get_json())
@@ -57,6 +65,8 @@ def create_permission():
 
 
 @permission_bp.patch("/<uuid:permission_id>")
+@jwt_required()
+@permission_required("permission.update")
 def update_permission(permission_id):
 
     data = update_permission_schema.load(request.get_json())
@@ -70,6 +80,8 @@ def update_permission(permission_id):
 
 
 @permission_bp.delete("/<uuid:permission_id>")
+@jwt_required()
+@permission_required("permission.delete")
 def delete_permission(permission_id):
 
     with SessionFactory() as session:

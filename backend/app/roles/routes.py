@@ -1,6 +1,8 @@
 # type: ignore
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, request
+from flask_jwt_extended import jwt_required
 
+from app.auth.authorization import permission_required
 from app.extensions import SessionFactory
 from app.roles.schema import (
     add_permission_schema,
@@ -19,6 +21,8 @@ role_bp = Blueprint(
 
 
 @role_bp.get("/")
+@jwt_required()
+@permission_required("role.read")
 def get_roles():
     with SessionFactory() as session:
         service = RoleService(session)
@@ -28,6 +32,8 @@ def get_roles():
 
 
 @role_bp.get("/<uuid:role_id>")
+@jwt_required()
+@permission_required("role.read")
 def get_role(role_id):
 
     with SessionFactory() as session:
@@ -35,10 +41,12 @@ def get_role(role_id):
 
         role = service.get_role(role_id)
 
-        return jsonify(role_schema.dump(role))
+        return role_schema.dump(role)
 
 
+@jwt_required()
 @role_bp.post("/")
+@permission_required("role.create")
 def create_role():
 
     data = create_role_schema.load(request.get_json())
@@ -52,12 +60,14 @@ def create_role():
         )
 
         return (
-            jsonify(role_schema.dump(role)),
+            role_schema.dump(role),
             201,
         )
 
 
 @role_bp.patch("/<uuid:role_id>")
+@jwt_required()
+@permission_required("role.update")
 def update_role(role_id):
 
     data = update_role_schema.load(request.get_json())
@@ -67,10 +77,12 @@ def update_role(role_id):
 
         role = service.update_role(role_id, data)
 
-        return jsonify(role_schema.dump(role))
+        return role_schema.dump(role)
 
 
 @role_bp.delete("/<uuid:role_id>")
+@jwt_required()
+@permission_required("role.delete")
 def delete_role(role_id):
 
     with SessionFactory() as session:
@@ -79,12 +91,14 @@ def delete_role(role_id):
         service.delete_role(role_id)
 
         return (
-            jsonify({"message": "Role deleted successfully."}),
+            {"message": "Role deleted successfully."},
             200,
         )
 
 
 @role_bp.post("/<uuid:role_id>/permissions")
+@jwt_required()
+@permission_required("role.assign_permission")
 def assign_permission(role_id):
     data = add_permission_schema.load(request.get_json())
 
@@ -100,6 +114,8 @@ def assign_permission(role_id):
 
 
 @role_bp.delete("/<uuid:role_id>/permissions/<uuid:permission_id>")
+@jwt_required()
+@permission_required("role.assign_permission")
 def remove_permission(role_id, permission_id):
     with SessionFactory() as session:
         service = RoleService(session)
