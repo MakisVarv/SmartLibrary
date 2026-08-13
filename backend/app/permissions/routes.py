@@ -1,5 +1,5 @@
 # type: ignore
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, request
 from flask_jwt_extended import jwt_required
 
 from app.auth.authorization import permission_required
@@ -40,7 +40,7 @@ def get_permission(permission_id):
 
         permission = service.get_permission(permission_id)
 
-        return jsonify(permission_schema.dump(permission))
+        return permission_schema.dump(permission)
 
 
 @permission_bp.post("/")
@@ -59,7 +59,7 @@ def create_permission():
         )
 
         return (
-            jsonify(permission_schema.dump(permission)),
+            permission_schema.dump(permission),
             201,
         )
 
@@ -76,7 +76,7 @@ def update_permission(permission_id):
 
         permission = service.update_permission(permission_id, data)
 
-        return jsonify(permission_schema.dump(permission))
+        return permission_schema.dump(permission)
 
 
 @permission_bp.delete("/<uuid:permission_id>")
@@ -90,6 +90,6 @@ def delete_permission(permission_id):
         service.delete_permission(permission_id)
 
         return (
-            jsonify({"message": "Permission deleted successfully."}),
+            {"message": "Permission deleted successfully."},
             200,
         )
