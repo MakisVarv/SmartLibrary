@@ -1,9 +1,13 @@
 import uuid
+from typing import TYPE_CHECKING
 
 from sqlalchemy import String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.extensions import Base
+
+if TYPE_CHECKING:
+    from app.books.model import Book
 
 
 class Category(Base):
@@ -24,4 +28,8 @@ class Category(Base):
     description: Mapped[str | None] = mapped_column(
         String(255),
         nullable=True,
+    )
+    books: Mapped[list["Book"]] = relationship(
+        "Book",
+        back_populates="category",
     )

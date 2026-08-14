@@ -4,6 +4,7 @@ from flask import Flask, jsonify
 
 from app.auth.routes import auth_bp
 from app.authors import author_bp
+from app.books import book_bp
 from app.categories import category_bp
 from app.common.error_handler import register_error_handlers
 from app.config import JWT_SECRET_KEY
@@ -23,6 +24,7 @@ app.register_blueprint(auth_bp)
 app.register_blueprint(user_bp)
 app.register_blueprint(author_bp)
 app.register_blueprint(category_bp)
+app.register_blueprint(book_bp)
 
 
 @app.route("/health", methods=["GET"])

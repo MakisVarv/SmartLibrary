@@ -1,10 +1,14 @@
 import uuid
 from datetime import date
+from typing import TYPE_CHECKING
 
 from sqlalchemy import Date, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.extensions import Base
+
+if TYPE_CHECKING:
+    from app.books.model import Book
 
 
 class Author(Base):
@@ -38,4 +42,9 @@ class Author(Base):
     birth_date: Mapped[date | None] = mapped_column(
         Date,
         nullable=True,
+    )
+
+    books: Mapped[list["Book"]] = relationship(
+        "Book",
+        back_populates="author",
     )

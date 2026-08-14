@@ -4,13 +4,14 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy import engine_from_config, pool
 
+from app.authors import Author  # noqa: F401
+from app.books import Book  # noqa: F401
+from app.categories import Category  # noqa: F401
 from app.config import DATABASE_URL
 from app.extensions import Base
 from app.permissions import Permission  # noqa: F401
 from app.roles import Role, role_permissions  # noqa: F401
 from app.users import User  # noqa: F401
-from app.authors import Author  # noqa: F401
-from app.categories import Category  # noqa: F401
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
