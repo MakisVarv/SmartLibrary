@@ -9,6 +9,7 @@ from app.categories import category_bp
 from app.common.error_handler import register_error_handlers
 from app.config import JWT_SECRET_KEY
 from app.extensions import jwt
+from app.members import member_bp
 from app.permissions import permission_bp
 from app.roles import role_bp
 from app.users import user_bp
@@ -22,6 +23,7 @@ app.register_blueprint(role_bp)
 app.register_blueprint(permission_bp)
 app.register_blueprint(auth_bp)
 app.register_blueprint(user_bp)
+app.register_blueprint(member_bp)
 app.register_blueprint(author_bp)
 app.register_blueprint(category_bp)
 app.register_blueprint(book_bp)

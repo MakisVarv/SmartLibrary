@@ -9,6 +9,7 @@ from app.books import Book  # noqa: F401
 from app.categories import Category  # noqa: F401
 from app.config import DATABASE_URL
 from app.extensions import Base
+from app.members import Member  # noqa: F401
 from app.permissions import Permission  # noqa: F401
 from app.roles import Role, role_permissions  # noqa: F401
 from app.users import User  # noqa: F401
