@@ -8,6 +8,7 @@ from app.extensions import Base
 
 if TYPE_CHECKING:
     from app.authors.model import Author
+    from app.borrowings.model import Borrowing
     from app.categories.model import Category
 
 
@@ -49,4 +50,9 @@ class Book(Base):
     description: Mapped[str | None] = mapped_column(
         String(255),
         nullable=True,
+    )
+
+    borrowings: Mapped[list["Borrowing"]] = relationship(
+        "Borrowing",
+        back_populates="book",
     )

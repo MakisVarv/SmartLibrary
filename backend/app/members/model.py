@@ -1,10 +1,14 @@
 import uuid
 from datetime import datetime
+from typing import TYPE_CHECKING
 
 from sqlalchemy import Boolean, DateTime, String, func
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.extensions import Base
+
+if TYPE_CHECKING:
+    from app.borrowings.model import Borrowing
 
 
 class Member(Base):
@@ -51,4 +55,8 @@ class Member(Base):
         DateTime(timezone=True),
         server_default=func.now(),
         nullable=False,
+    )
+    borrowings: Mapped[list["Borrowing"]] = relationship(
+        "Borrowing",
+        back_populates="member",
     )
