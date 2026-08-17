@@ -10,6 +10,7 @@ from app.books.schema import (
     update_book_schema,
 )
 from app.books.service import BookService
+from app.common.exceptions.bad_request import BadRequestException
 from app.extensions import SessionFactory
 
 book_bp = Blueprint("books", __name__, url_prefix="/api/books")
@@ -19,11 +20,26 @@ book_bp = Blueprint("books", __name__, url_prefix="/api/books")
 @jwt_required()
 @permission_required("book.read")
 def get_books():
+    page = request.args.get("page", default=1, type=int)
+    page_size = request.args.get("page_size", default=10, type=int)
+    search = request.args.get("search")
+
+    if page < 1 or page_size < 1:
+        raise BadRequestException("Page and page size must be greater than 0.")
+
     with SessionFactory() as session:
         service = BookService(session)
-        books = service.get_books()
 
-        return books_schema.dump(books), 200
+        books, pagination = service.get_books(
+            page=page,
+            page_size=page_size,
+            search=search,
+        )
+
+        return {
+            "items": books_schema.dump(books),
+            "pagination": pagination,
+        }, 200
 
 
 @book_bp.get("/<uuid:book_id>")

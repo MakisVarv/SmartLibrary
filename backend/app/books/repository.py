@@ -1,7 +1,8 @@
 import uuid
 
-from sqlalchemy import select
+from sqlalchemy import select, func
 from sqlalchemy.orm import Session
+from sqlalchemy.sql.elements import or_
 
 from app.books.model import Book
 
@@ -11,9 +12,44 @@ class BookRepository:
     def __init__(self, session: Session):
         self.session = session
 
-    def get_all(self):
+    def get_all(
+        self,
+        page: int = 1,
+        page_size: int = 10,
+        search: str | None = None,
+    ):
+        offset = (page - 1) * page_size
+
         statement = select(Book)
+
+        if search:
+            pattern = f"%{search.strip()}%"
+
+            statement = statement.where(
+                or_(
+                    Book.title.ilike(pattern),
+                    Book.isbn.ilike(pattern),
+                )
+            )
+
+        statement = (
+            statement.order_by(Book.title, Book.id).offset(offset).limit(page_size)
+        )
+
         return self.session.scalars(statement).all()
+
+    def count(self, search: str | None = None):
+        statement = select(func.count(Book.id))
+        if search:
+            pattern = f"%{search.strip()}%"
+
+            statement = statement.where(
+                or_(
+                    Book.title.ilike(pattern),
+                    Book.isbn.ilike(pattern),
+                )
+            )
+        return self.session.scalar(statement) or 0
 
     def get_by_id(self, book_id: uuid.UUID):
         return self.session.get(Book, book_id)

@@ -1,6 +1,5 @@
 import uuid
 from datetime import date
-from typing import Sequence
 
 from sqlalchemy.orm import Session
 
@@ -64,9 +63,28 @@ class BookService:
             self.session.rollback()
             raise
 
-    def get_books(self) -> Sequence[Book]:
+    def get_books(
+        self,
+        page: int = 1,
+        page_size: int = 10,
+        search: str | None = None,
+    ):
+        books = self.repository.get_all(
+            page=page,
+            page_size=page_size,
+            search=search,
+        )
 
-        return self.repository.get_all()
+        total = self.repository.count(search=search)
+
+        total_pages = (total + page_size - 1) // page_size
+
+        return books, {
+            "page": page,
+            "page_size": page_size,
+            "total": total,
+            "total_pages": total_pages,
+        }
 
     def get_book(self, book_id) -> Book:
 
