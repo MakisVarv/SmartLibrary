@@ -74,6 +74,12 @@ class BorrowingService:
 
     def delete_borrowing(self, borrowing_id: uuid.UUID) -> None:
         borrowing = self.get_borrowing(borrowing_id)
+        book = self.book_repository.get_by_id(borrowing.book_id)
+        if book is None:
+            raise NotFoundException("Book")
+        if borrowing.status == BorrowStatus.BORROWED:
+            if book.available_copies < book.copies:
+                book.available_copies += 1
 
         try:
             self.repository.delete(borrowing)
@@ -87,13 +93,14 @@ class BorrowingService:
         book = self.book_repository.get_by_id(borrowing.book_id)
         if borrowing.status == BorrowStatus.RETURNED:
             raise BadRequestException("Book is already returned")
-
+        if book is None:
+            raise NotFoundException("Book")
         try:
             borrowing.status = BorrowStatus.RETURNED
             borrowing.return_date = datetime.date.today()
-            if book:
-                book.available_copies += 1
+            book.available_copies += 1
             self.session.commit()
+            return borrowing
         except Exception:
             self.session.rollback()
             raise

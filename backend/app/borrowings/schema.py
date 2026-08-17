@@ -8,10 +8,15 @@ class BorrowingSchema(Schema):
     """Borrowing response schema."""
 
     id = fields.UUID()
+
     borrow_date = fields.Date()
+
     due_date = fields.Date()
+
     return_date = fields.Date(allow_none=True)
-    status = fields.String()
+
+    status = fields.Function(serialize=lambda borrowing: borrowing.status.value)
+
     book = fields.Nested(book_schema)
 
     member = fields.Nested(member_schema)

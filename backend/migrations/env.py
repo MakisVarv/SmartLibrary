@@ -6,6 +6,7 @@ from sqlalchemy import engine_from_config, pool
 
 from app.authors import Author  # noqa: F401
 from app.books import Book  # noqa: F401
+from app.borrowings import Borrowing  # noqa: F401
 from app.categories import Category  # noqa: F401
 from app.config import DATABASE_URL
 from app.extensions import Base

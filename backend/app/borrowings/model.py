@@ -29,7 +29,7 @@ class Borrowing(Base):
 
     borrow_date: Mapped[date] = mapped_column(
         Date(),
-        server_default=func.now(),
+        server_default=func.current_date(),
         nullable=False,
     )
 
