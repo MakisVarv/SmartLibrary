@@ -9,6 +9,7 @@ from app.borrowings import borrowing_bp
 from app.categories import category_bp
 from app.common.error_handler import register_error_handlers
 from app.config import JWT_SECRET_KEY
+from app.dashboard import dashboard_bp
 from app.extensions import jwt
 from app.members import member_bp
 from app.permissions import permission_bp
@@ -29,6 +30,7 @@ app.register_blueprint(author_bp)
 app.register_blueprint(category_bp)
 app.register_blueprint(book_bp)
 app.register_blueprint(borrowing_bp)
+app.register_blueprint(dashboard_bp)
 
 
 @app.route("/health", methods=["GET"])
